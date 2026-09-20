@@ -1,147 +1,31 @@
-<!doctype html>
-<html lang="ja">
-<head>
-<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover,user-scalable=no">
-<title>転生∞ - Re:World</title>
- <link rel="manifest" href="/reward/manifest.json">
-<meta name="theme-color" content="#080b18">
-<link rel="apple-touch-icon" href="/reward/icon-192.png">
-<style>
-:root{--bg:#080b18;--panel:#11162a;--line:#293252;--text:#edf2ff;--muted:#9ca8ca;--accent:#7d6cff;--gold:#ffd166;--red:#ff5d73;--green:#57df9b;--blue:#55b7ff}
-*{box-sizing:border-box} body{margin:0;font-family:system-ui,-apple-system,"Noto Sans JP",sans-serif;background:radial-gradient(circle at top,#1c1740,#080b18 45%);color:var(--text)}
-header{padding:18px 20px;border-bottom:1px solid var(--line);background:#090d1ddd;position:sticky;top:0;z-index:3} h1{margin:0;font-size:22px}.sub{color:var(--muted);font-size:12px}
-main{max-width:1200px;margin:auto;padding:16px;display:grid;grid-template-columns:1fr 1.2fr;gap:14px}.card{background:#11162add;border:1px solid var(--line);border-radius:16px;padding:14px;box-shadow:0 12px 35px #0005}.wide{grid-column:1/-1}
-h2{font-size:16px;margin:0 0 10px} .stats{display:grid;grid-template-columns:repeat(4,1fr);gap:7px}.stat{background:#0b1020;border-radius:10px;padding:8px;text-align:center}.stat b{display:block;font-size:18px}.stat span{font-size:10px;color:var(--muted)}
-.bar{height:12px;background:#252b42;border-radius:99px;overflow:hidden;margin:5px 0}.bar i{display:block;height:100%;transition:.25s}.hp{background:var(--red)}.mp{background:var(--blue)}.xp{background:var(--green)}
-button{border:1px solid #3c4670;background:#1b2341;color:white;border-radius:10px;padding:9px 11px;cursor:pointer;margin:3px;font-weight:650}button:hover{filter:brightness(1.25)}button:disabled{opacity:.35;cursor:not-allowed}.primary{background:#4436b8}.danger{background:#852c45}.gold{color:var(--gold)}
-.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(145px,1fr));gap:7px}.item{background:#0b1020;border:1px solid #252e4d;border-radius:11px;padding:9px;font-size:12px}.item strong{display:block;font-size:13px}.small{font-size:11px;color:var(--muted)}
-#log{height:190px;overflow:auto;background:#070b16;padding:10px;border-radius:10px;font-size:12px;line-height:1.55}.enemy{text-align:center;padding:10px}.enemy .icon{font-size:55px}.weak{color:#ffd166}.tabs button{font-size:11px}
-.hidden{display:none}.jobtree{display:flex;gap:8px;flex-wrap:wrap;align-items:center}.job{padding:7px;background:#0a1020;border-radius:8px;border:1px solid #293252}.arrow{color:#7782a8}
-@media(max-width:760px){main{grid-template-columns:1fr}.wide{grid-column:auto}.stats{grid-template-columns:repeat(2,1fr)}}
-</style>
-<style>
-/* v2 mobile portrait UI */
-html{font-size:16px;-webkit-text-size-adjust:100%;touch-action:manipulation}
-body{padding-bottom:calc(82px + env(safe-area-inset-bottom));min-height:100dvh}
-header{padding:10px 14px 9px;padding-top:calc(10px + env(safe-area-inset-top));position:sticky;top:0}
-header h1{font-size:19px;line-height:1.2}.sub{font-size:10px;margin-top:2px}
-main{width:100%;max-width:560px;margin:0 auto;padding:9px;display:flex;flex-direction:column;gap:9px}
-.card{border-radius:13px;padding:11px;width:100%}.wide{grid-column:auto}
-h2{font-size:15px;margin:0 0 8px}.stats{grid-template-columns:repeat(4,1fr);gap:4px}
-.stat{padding:6px 2px}.stat b{font-size:15px}.stat span{font-size:9px}
-.bar{height:10px;margin:4px 0 7px}
-.enemy{padding:3px 4px 7px}.enemy .icon{font-size:48px;line-height:1.1}
-#combat{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:7px}
-#combat button{width:100%;min-height:48px;margin:0;padding:8px 5px;font-size:13px;line-height:1.15}
-button{min-height:44px;font-size:14px;padding:9px 10px;margin:2px}
-.tabs{position:fixed;z-index:10;left:0;right:0;bottom:0;padding:5px 4px calc(5px + env(safe-area-inset-bottom));background:#090d1df2;border-top:1px solid var(--line);display:grid;grid-template-columns:repeat(4,1fr);gap:3px;backdrop-filter:blur(12px)}
-.tabs button{margin:0;padding:4px 1px;min-height:50px;font-size:10px;line-height:1.15;border-radius:8px}
-#tab{padding-top:4px;min-height:120px}.grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:6px}
-.item{padding:8px;font-size:12px}.item strong{font-size:13px}.small{font-size:10px}
-.jobtree{display:block;overflow-x:auto;white-space:nowrap;padding-bottom:5px;-webkit-overflow-scrolling:touch}
-.jobtree>div{margin-bottom:7px}.job{display:inline-block;font-size:11px;padding:6px}.arrow{font-size:11px}
-#jobActions{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:4px}
-#jobActions button{width:100%;margin:0;font-size:11px;min-height:40px}
-#log{height:130px;font-size:11px;line-height:1.45}
-.card:nth-of-type(1){order:1}.card:nth-of-type(2){order:2}.card:nth-of-type(3){order:3}.card:nth-of-type(4){order:4}
-@media (max-width:380px){
- html{font-size:15px}.stats{grid-template-columns:repeat(2,1fr)}
- #combat{grid-template-columns:1fr 1fr}.grid{grid-template-columns:1fr}
- .tabs button{font-size:9px}.enemy .icon{font-size:42px}
-}
-@media (min-width:700px){
- body{padding-bottom:0}main{max-width:1100px;display:grid;grid-template-columns:1fr 1.2fr;padding:16px;gap:14px}
- .wide{grid-column:1/-1}.tabs{position:static;display:block;padding:0;background:none;border:0;backdrop-filter:none}
- .tabs button{font-size:11px;min-height:44px;padding:9px 11px}.grid{grid-template-columns:repeat(auto-fit,minmax(145px,1fr))}
- #combat{display:block}.enemy .icon{font-size:55px}#log{height:190px}
-}
-</style>
-</head>
-<body>
-<header><h1>♾️ 転生∞ - Re:World</h1><div class="sub">一人で世界を超越する転生RPG — セーブは自動</div></header>
-<main>
-<section class="card"><h2>🧙 主人公</h2><div id="hero"></div><div class="stats" id="stats"></div><div id="bars"></div>
-<h2 style="margin-top:14px">🌳 職業ツリー</h2><div id="jobtree" class="jobtree"></div><div id="jobActions"></div></section>
-
-<section class="card"><h2>⚔️ 戦闘</h2><div id="enemy" class="enemy"></div><div id="combat"></div></section>
-
-<section class="card wide"><div class="tabs">
-<button onclick="showTab('skills')">✨<br>魔法</button><button onclick="showTab('shop')">🏪<br>店</button><button onclick="showTab('equip')">🗡️<br>装備</button><button onclick="showTab('world')">🌌<br>世界</button><button onclick="showTab('ach')">🏆<br>図鑑</button><button onclick="showTab('reinc')">🔄<br>転生</button><button onclick="inn()">🏨<br>宿屋</button>
-</div><div id="tab"></div></section>
-<section class="card wide"><h2>📜 冒険ログ</h2><div id="log"></div></section>
-</main>
-<script>
-const enemies=[
-{name:"スライム",icon:"🟢",hp:45,atk:7,xp:22,gold:15,weak:"炎",tier:1},
-{name:"ゴブリン戦士",icon:"👺",hp:90,atk:13,xp:45,gold:35,weak:"雷",tier:1},
-{name:"炎狼",icon:"🐺",hp:160,atk:20,xp:75,gold:55,weak:"氷",tier:2},
-{name:"オーガ",icon:"👹",hp:280,atk:30,xp:130,gold:90,weak:"魔法",tier:2},
-{name:"黒騎士",icon:"🗡️",hp:500,atk:45,xp:240,gold:180,weak:"聖",tier:3},
-{name:"古龍",icon:"🐉",hp:900,atk:65,xp:450,gold:400,weak:"氷",tier:3},
-{name:"魔王",icon:"😈",hp:1600,atk:90,xp:900,gold:900,weak:"聖",tier:4,boss:true},
-{name:"時喰らい",icon:"🕳️",hp:3200,atk:140,xp:1800,gold:1800,weak:"時空",tier:5,boss:true},
-{name:"神界の番人",icon:"👁️",hp:6500,atk:220,xp:4000,gold:4000,weak:"空間",tier:6,boss:true}
-];
-const skills=[
-{id:"fire",name:"🔥 ファイア",mp:8,pow:1.7,type:"炎",lv:2},
-{id:"thunder",name:"⚡ 雷撃",mp:12,pow:2.0,type:"雷",lv:5},
-{id:"heal",name:"💚 ヒール",mp:15,heal:0.35,lv:7},
-{id:"meteor",name:"☄️ メテオ",mp:35,pow:4.2,type:"魔法",lv:15,job:"魔術使い"},
-{id:"gravity",name:"🪐 グラビティ",mp:45,pow:5.2,type:"魔法",lv:20,job:"大魔導師"},
-{id:"stop",name:"⏱️ 時間停止",mp:55,pow:3.0,type:"時空",lv:25,job:"時空魔導師",stun:true},
-{id:"rift",name:"🌀 空間断裂",mp:70,pow:7.0,type:"空間",lv:30,job:"時空魔導師"}
-];
-const jobs=[
-{name:"旅人",req:1},{name:"剣士",req:5,from:"旅人"},{name:"騎士",req:12,from:"剣士"},{name:"聖騎士",req:22,from:"騎士"},{name:"神聖騎士",req:35,from:"聖騎士"},
-{name:"魔術使い",req:5,from:"旅人"},{name:"大魔導師",req:15,from:"魔術使い"},{name:"時空魔導師",req:25,from:"大魔導師",reb:3},{name:"次元支配者",req:40,from:"時空魔導師",reb:10}
-];
-const shop=[
-{name:"鉄の剣",cost:120,atk:8,type:"weapon"},{name:"魔導杖",cost:300,atk:15,type:"weapon"},{name:"竜殺し",cost:1200,atk:38,type:"weapon"},
-{name:"革鎧",cost:100,def:5,type:"armor"},{name:"聖銀鎧",cost:700,def:20,type:"armor"},{name:"神装・星衣",cost:3500,def:55,type:"armor"},
-{name:"力の指輪",cost:450,atk:10,type:"acc"},{name:"賢者の石",cost:1800,mp:60,type:"acc"},{name:"天空の家",cost:5000,bonus:0.15,type:"estate"}
-];
-let S=JSON.parse(localStorage.getItem("reworldSave")||"null")||{lv:1,xp:0,gold:50,hp:100,mp:50,maxHp:100,maxMp:50,atk:12,def:3,job:"旅人",reb:0,rp:0,kills:0,owned:[],equip:{},defending:false,stun:false,unlocked:1,ach:[],seen:[]};
-let E=null,tab="skills";
-function needXp(){return 50+S.lv*35}
-function save(){localStorage.setItem("reworldSave",JSON.stringify(S))}
-function log(t){let x=document.getElementById("log");x.innerHTML=`<div>› ${t}</div>`+x.innerHTML}
-function spawn(){let pool=enemies.filter(e=>e.tier<=S.unlocked);let base=pool[Math.floor(Math.random()*pool.length)];E={...base,maxHp:base.hp};S.seen=[...new Set([...S.seen,base.name])];render()}
-function damage(pow=1,type="物理"){let d=Math.max(1,Math.floor((S.atk+(S.equip.weapon?.atk||0)+(S.equip.acc?.atk||0))*pow*(.85+Math.random()*.3)));if(E.weak==type)d=Math.floor(d*1.65);E.hp-=d;log(`${type}攻撃！ ${E.name}に <b>${d}</b> ダメージ${E.weak==type?"（弱点！）":""}`);if(E.hp<=0){win();return} enemyTurn()}
-function enemyTurn(){if(S.stun){S.stun=false;log(`${E.name}は時間停止で動けない！`);render();return}let d=Math.max(1,E.atk-(S.def+(S.equip.armor?.def||0))-(S.defending?Math.floor(E.atk*.55):0));S.defending=false;S.hp-=d;log(`${E.name}の攻撃！ ${d}ダメージ`);if(S.hp<=0){S.hp=Math.floor(S.maxHp*.5);S.mp=Math.floor(S.maxMp*.5);S.gold=Math.floor(S.gold*.9);log("💀 敗北…宿屋へ運ばれた。所持金を10%失った。");E=null}render()}
-function win(){let mul=1+(S.equip.estate?.bonus||0);let g=Math.floor(E.gold*mul),x=E.xp;S.gold+=g;S.xp+=x;S.kills++;log(`🏆 ${E.name}撃破！ EXP +${x} / ${g}G`);if(E.name=="魔王")S.unlocked=Math.max(S.unlocked,5);if(E.name=="時喰らい")S.unlocked=Math.max(S.unlocked,6);E=null;levelUp();achievements();spawn()}
-function levelUp(){while(S.xp>=needXp()){S.xp-=needXp();S.lv++;S.maxHp+=18;S.maxMp+=8;S.atk+=4;S.def+=2;S.hp=S.maxHp;S.mp=S.maxMp;log(`✨ LEVEL UP → Lv.${S.lv}`)}}
-function attack(){if(!E)return;damage(1,"物理")}
-function defend(){S.defending=true;log("🛡️ 防御態勢。次のダメージを軽減。");enemyTurn()}
-function cast(id){let s=skills.find(x=>x.id==id);if(S.mp<s.mp)return log("MPが足りない");S.mp-=s.mp;if(s.heal){let h=Math.floor(S.maxHp*s.heal);S.hp=Math.min(S.maxHp,S.hp+h);log(`💚 HPを${h}回復`);enemyTurn()}else{if(s.stun)S.stun=true;damage(s.pow,s.type)}}
-function combo(){if(S.mp<100)return log("MPが足りない");S.mp-=100;S.stun=true;damage(10,"時空");log("💥 合わせ技【停止世界・終焉メテオ】！")}
-function inn(){S.hp=S.maxHp;S.mp=S.maxMp;log("🏨 宿屋でHP・MP全回復。料金は0G。");render()}
-function changeJob(n){let j=jobs.find(x=>x.name==n);if(S.lv<j.req||S.reb<(j.reb||0))return;S.job=n;log(`🌳 ${n}へ転職！`);render()}
-function buy(i){let it=shop[i];if(S.gold<it.cost)return log("お金が足りない");if(S.owned.includes(it.name))return;S.gold-=it.cost;S.owned.push(it.name);log(`🛍️ ${it.name}を購入`);render()}
-function equip(i){let it=shop[i];if(!S.owned.includes(it.name))return;S.equip[it.type]=it;log(`🗡️ ${it.name}を装備`);render()}
-function reincarnate(){if(S.lv<30)return log("転生にはLv.30以上が必要");let gain=Math.floor(S.lv/10)+1;let reb=S.reb+1,rp=S.rp+gain,owned=S.owned,equip=S.equip,unlocked=S.unlocked,ach=S.ach,seen=S.seen;S={lv:1,xp:0,gold:100+rp*50,hp:100+rp*10,mp:50+rp*5,maxHp:100+rp*10,maxMp:50+rp*5,atk:12+rp*2,def:3+rp,job:"旅人",reb,rp,kills:0,owned,equip,defending:false,stun:false,unlocked,ach,seen};log(`🔄 ${reb}回目の転生！ 転生ポイント +${gain}`);spawn()}
-function achievements(){let a=[];if(S.kills>=10)a.push("駆け出し討伐者");if(S.lv>=20)a.push("限界突破者");if(S.gold>=3000)a.push("大富豪");if(S.reb>=3)a.push("輪廻を知る者");for(let x of a)if(!S.ach.includes(x)){S.ach.push(x);log(`🏆 実績解除：${x}`)}}
-function skillOK(s){return S.lv>=s.lv&&(!s.job||jobs.findIndex(j=>j.name==S.job)>=jobs.findIndex(j=>j.name==s.job))}
-function showTab(t){tab=t;render()}
-function render(){
-save();document.getElementById("hero").innerHTML=`<b>${S.job}</b>　Lv.${S.lv}　<span class="gold">転生 ${S.reb}回 / RP ${S.rp}</span>`;
-document.getElementById("stats").innerHTML=`<div class=stat><b>${S.atk+(S.equip.weapon?.atk||0)+(S.equip.acc?.atk||0)}</b><span>攻撃</span></div><div class=stat><b>${S.def+(S.equip.armor?.def||0)}</b><span>防御</span></div><div class=stat><b>${S.gold}G</b><span>所持金</span></div><div class=stat><b>${S.kills}</b><span>討伐</span></div>`;
-document.getElementById("bars").innerHTML=`HP ${S.hp}/${S.maxHp}<div class=bar><i class=hp style="width:${100*S.hp/S.maxHp}%"></i></div>MP ${S.mp}/${S.maxMp}<div class=bar><i class=mp style="width:${100*S.mp/S.maxMp}%"></i></div>EXP ${S.xp}/${needXp()}<div class=bar><i class=xp style="width:${100*S.xp/needXp()}%"></i></div>`;
-let paths=[["旅人","剣士","騎士","聖騎士","神聖騎士"],["旅人","魔術使い","大魔導師","時空魔導師","次元支配者"]];
-document.getElementById("jobtree").innerHTML=paths.map(p=>`<div>${p.map((n,i)=>`<span class=job>${n}${jobs.find(x=>x.name==n).reb?`<small> 転生${jobs.find(x=>x.name==n).reb}</small>`:""}</span>${i<p.length-1?'<span class=arrow>→</span>':''}`).join("")}</div>`).join("");
-document.getElementById("jobActions").innerHTML=jobs.filter(j=>j.name!=S.job&&S.lv>=j.req&&S.reb>=(j.reb||0)).map(j=>`<button onclick="changeJob('${j.name}')">${j.name}へ転職</button>`).join("");
-if(!E)spawn();document.getElementById("enemy").innerHTML=`<div class=icon>${E.icon}</div><b>${E.boss?"👑 ":""}${E.name}</b><div class=weak>弱点：${E.weak}</div><div class=bar><i class=hp style="width:${Math.max(0,100*E.hp/E.maxHp)}%"></i></div>${Math.max(0,E.hp)}/${E.maxHp}`;
-document.getElementById("combat").innerHTML=`<button class=primary onclick=attack()>⚔️ 攻撃</button><button onclick=defend()>🛡️ 防御</button>`+skills.filter(skillOK).map(s=>`<button onclick="cast('${s.id}')">${s.name} ${s.mp}MP</button>`).join("")+(skills.find(s=>s.id=="meteor")&&skillOK(skills.find(s=>s.id=="stop"))&&skillOK(skills.find(s=>s.id=="meteor"))?`<button class=danger onclick=combo()>💥 時間停止＋メテオ 100MP</button>`:"");
-let T="";
-if(tab=="skills")T=`<h2>✨ 習得魔法</h2><div class=grid>${skills.map(s=>`<div class=item><strong>${s.name}</strong>${skillOK(s)?"✅ 習得済":"🔒 未習得"}<div class=small>Lv.${s.lv}${s.job?" / "+s.job:""}・${s.mp}MP</div></div>`).join("")}</div>`;
-if(tab=="shop")T=`<h2>🏪 ショップ</h2><div class=grid>${shop.map((x,i)=>`<div class=item><strong>${x.name}</strong><span class=gold>${x.cost}G</span><div class=small>${x.atk?`攻撃+${x.atk}`:""}${x.def?`防御+${x.def}`:""}${x.mp?`MP+${x.mp}`:""}${x.bonus?" 戦利品+15%":""}</div><button onclick=buy(${i}) ${S.owned.includes(x.name)?"disabled":""}>${S.owned.includes(x.name)?"購入済":"購入"}</button></div>`).join("")}</div>`;
-if(tab=="equip")T=`<h2>🗡️ 所持装備</h2><div class=grid>${shop.filter(x=>S.owned.includes(x.name)).map(x=>{let i=shop.indexOf(x);return `<div class=item><strong>${x.name}</strong><button onclick=equip(${i})>装備</button></div>`}).join("")||"まだ装備がない"}</div>`;
-if(tab=="world")T=`<h2>🌌 解放された世界</h2><div class=grid><div class=item>🌲 人間界<br>常時開放</div><div class=item>${S.unlocked>=5?"🕳️ 時空界":"🔒 魔王撃破で時空界"}</div><div class=item>${S.unlocked>=6?"☁️ 神界":"🔒 時喰らい撃破で神界"}</div><div class=item>🏚️ 無限迷宮<br><span class=small>敵は戦闘ごとに出現。高位世界ほど強敵が追加。</span></div></div>`;
-if(tab=="ach")T=`<h2>🏆 実績</h2>${S.ach.join(" / ")||"未解除"}<h2>📖 魔物図鑑</h2><div class=grid>${enemies.map(e=>`<div class=item>${S.seen.includes(e.name)?`${e.icon} ${e.name}<br><span class=weak>弱点 ${e.weak}</span>`:"❓ 未遭遇"}</div>`).join("")}</div>`;
-if(tab=="reinc")T=`<h2>🔄 転生</h2><p>Lv.30以上で転生可能。レベルは1に戻るが、転生ポイントに応じて基礎能力が恒久強化される。装備・図鑑・実績・世界解放は維持。</p><p>3回転生：時空魔導師　／　10回転生：次元支配者</p><button class=danger onclick=reincarnate() ${S.lv<30?"disabled":""}>転生する（現在Lv.${S.lv}）</button><button onclick="if(confirm('セーブを消しますか？')){localStorage.removeItem('reworldSave');location.reload()}">セーブ初期化</button>`;
-document.getElementById("tab").innerHTML=T;
-}
-spawn();log("🌟 異世界に転生した。魔王、時空界、そして神界を目指せ。");
-if ("serviceWorker" in navigator) {
-  navigator.serviceWorker.register("/reward/sw.js");
-}
+<!doctype html><html lang="ja"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><title>転生∞ - Re:World</title><link rel="manifest" href="/reward/manifest.json"><meta name="theme-color" content="#080b18"><link rel="apple-touch-icon" href="/reward/icon-192.png"><style>
+:root{--b:#080b18;--p:#11162a;--l:#293252;--t:#edf2ff;--a:#6d5dfc;--r:#ff5d73;--g:#57df9b;--u:#55b8ff}*{box-sizing:border-box}body{margin:0;background:radial-gradient(circle at top,#171942,var(--b) 45%);color:var(--t);font-family:system-ui,-apple-system,"Noto Sans JP",sans-serif;padding-bottom:86px;min-height:100dvh}header{padding:13px 15px;background:#090d1ddd;border-bottom:1px solid var(--l);position:sticky;top:0;z-index:5}h1{font-size:19px;margin:0}main{max-width:600px;margin:auto;padding:9px;display:grid;gap:9px}.c{background:#11162add;border:1px solid var(--l);border-radius:14px;padding:11px}.sg,.grid{display:grid;grid-template-columns:repeat(2,1fr);gap:7px}.sg{grid-template-columns:repeat(4,1fr)}.s,.item{background:#0b1020;border-radius:9px;padding:7px;text-align:center;font-size:11px}.s b{font-size:17px;display:block}.bar{height:11px;background:#252b42;border-radius:99px;overflow:hidden;margin:4px 0 8px}.bar i{display:block;height:100%}.hp{background:var(--r)}.mp{background:var(--u)}.xp{background:var(--g)}button{border:1px solid #3c4670;background:#1b2341;color:white;border-radius:10px;padding:10px;font-weight:700}.pri{background:#493cc5}.enemy{text-align:center}.ico{font-size:48px}#log{height:120px;overflow:auto;background:#070b16;padding:8px;border-radius:9px;font-size:12px}nav{position:fixed;bottom:0;left:0;right:0;z-index:10;background:#090d1df5;border-top:1px solid var(--l);display:grid;grid-template-columns:repeat(6,1fr);gap:3px;padding:5px 5px calc(5px + env(safe-area-inset-bottom))}nav button{padding:7px 1px;font-size:10px}.ov{position:fixed;inset:0;background:#050713f2;z-index:30;display:flex;align-items:center;justify-content:center;padding:15px}.modal{width:min(540px,100%);max-height:90dvh;overflow:auto;background:var(--p);border:1px solid #46517e;border-radius:17px;padding:15px}.hide{display:none}.choice{width:100%;text-align:left;margin:4px 0}.tag{font-size:10px;background:#273055;border-radius:99px;padding:2px 6px}.float{position:fixed;z-index:50;left:48%;top:40%;font-size:24px;font-weight:900;animation:f 1s forwards}@keyframes f{to{transform:translateY(-65px);opacity:0}}@keyframes shake{50%{transform:translateX(5px)}}.shake{animation:shake .18s 2}
+</style></head><body><header><h1>∞ 転生∞ - Re:World</h1><small>ダンジョン転生RPG</small></header><main><section class=c><div id=hero></div><div id=stats></div><div id=bars></div></section><section class="c enemy"><h3>⚔️ 戦闘</h3><div id=enemy></div><div id=combat class=grid></div></section><section class=c id=tab></section><section class=c><b>📜 ログ</b><div id=log></div></section></main><nav><button onclick="show('adv')">🗺️<br>冒険</button><button onclick="show('skill')">✨<br>技</button><button onclick="show('eq')">🗡️<br>装備</button><button onclick="show('quest')">📜<br>依頼</button><button onclick="show('re')">🔄<br>転生</button><button onclick="show('inn')">🏨<br>宿</button></nav><div id=overlay class="ov hide"></div><script>
+const KEY="reworldSaveV4";
+const jobs={"剣士":{i:"⚔️",hp:130,mp:35,a:16,d:5,x:"高HP・高攻撃の近接職"},"魔術使い":{i:"🧙",hp:85,mp:95,a:11,d:2,x:"強力な魔法と合わせ技"},"僧侶":{i:"⛪",hp:110,mp:75,a:9,d:6,x:"回復と耐久が得意"},"盗賊":{i:"🥷",hp:95,mp:45,a:13,d:3,x:"会心・宝箱発見率が高い"}};
+const mobs=[["スライム","🟢",45,7,18,12,"炎"],["ゴブリン","👺",75,10,30,22,"雷"],["炎狼","🐺",110,14,45,35,"氷"],["オーガ","👹",165,18,65,50,"毒"],["黒騎士","♞",230,23,90,75,"光"]];
+const bosses=[["迷宮の番人","🗿",380,25,180,180,"雷","3ターンごとに防御"],["古龍","🐉",620,32,300,300,"氷","HP半分で狂暴化"],["魔王","😈",950,42,500,500,"光","呪毒を使用"]];
+const gear=[["鉄の剣","weapon",4,0,"N"],["魔力の杖","weapon",7,0,"R"],["旅人の鎧","armor",0,4,"N"],["黒騎士の剣","weapon",13,1,"SR"],["竜鱗の鎧","armor",0,12,"SR"],["時空の指輪","acc",7,5,"SSR"]];
+const skills=[["強撃","剣士",2,5,1.7,""],["ファイア","魔術使い",2,8,1.6,"炎"],["雷撃","魔術使い",5,12,2,"雷"],["ヒール","僧侶",2,10,0,"回復"],["毒刃","盗賊",2,6,1.4,"毒"],["メテオ","魔術使い",12,30,3.4,"炎"],["時間停止","魔術使い",18,35,.4,"停止"],["空間断裂","魔術使い",25,45,4.5,"時空"]];
+const fresh=()=>({job:null,lv:1,xp:0,next:70,hp:100,mhp:100,mp:50,mmp:50,a:10,d:3,gold:50,kills:0,reb:0,rp:0,floor:1,dun:0,bk:0,ch:0,inv:[],eq:{weapon:null,armor:null,acc:null},q:{kill:false,chest:false,boss:false},status:null,last:null});
+let S=Object.assign(fresh(),JSON.parse(localStorage.getItem(KEY)||"{}")),E=null,tab="adv",turn=0;
+const $=x=>document.getElementById(x),save=()=>localStorage.setItem(KEY,JSON.stringify(S));
+function log(x){$("log").innerHTML=x+"<br>"+$("log").innerHTML}function pop(x){let d=document.createElement("div");d.className="float";d.textContent=x;document.body.append(d);setTimeout(()=>d.remove(),1000)}
+function A(){return S.a+(S.eq.weapon?.[2]||0)+(S.eq.armor?.[2]||0)+(S.eq.acc?.[2]||0)+Math.floor(S.rp/2)}function D(){return S.d+(S.eq.weapon?.[3]||0)+(S.eq.armor?.[3]||0)+(S.eq.acc?.[3]||0)+Math.floor(S.rp/3)}
+function pickJob(){let o=$("overlay");o.classList.remove("hide");o.innerHTML=`<div class=modal><h2>🌟 職業選択</h2><p>最初の役職を選んでください。</p>${Object.entries(jobs).map(([n,j])=>`<button class=choice onclick="setJob('${n}')"><b>${j.i} ${n}</b><br><small>${j.x}</small></button>`).join("")}</div>`}
+function setJob(n){let j=jobs[n];S.job=n;S.mhp=j.hp;S.hp=j.hp;S.mmp=j.mp;S.mp=j.mp;S.a=j.a;S.d=j.d;save();$("overlay").classList.add("hide");spawn();log(`🌟 ${n}として冒険開始！`)}
+function mk(x,b=false){return{name:x[0],i:x[1],hp:x[2],mhp:x[2],a:x[3],xp:x[4],g:x[5],weak:x[6],boss:b,gim:x[7]||"",poison:0,stop:0}}
+function spawn(b=false){let x=b?bosses[Math.min(S.dun,bosses.length-1)]:mobs[Math.min(mobs.length-1,Math.floor((S.floor-1)/2))];E=mk(x,b);let k=1+S.reb*.12+S.floor*.04;E.hp=E.mhp=Math.floor(E.hp*k);turn=0;render()}
+function hit(mult=1,name="⚔️ 攻撃",st=""){if(!E)return;turn++;let crit=Math.random()<(S.job==="盗賊"?.22:.1),d=Math.max(1,Math.floor(A()*mult*(.85+Math.random()*.3)*(crit?1.8:1)));if(st&&E.weak===st)d=Math.floor(d*1.5);E.hp-=d;pop((crit?"💥":"")+"-"+d);log(`${name} ${d}ダメージ${crit?"【会心】":""}`);if(st==="毒")E.poison=3;if(st==="停止")E.stop=1;if(E.hp<=0)return win();enemyTurn();render()}
+function skill(i){let s=skills[i];if(s[1]!==S.job||S.lv<s[2])return log("🔒 未習得");if(S.mp<s[3])return log("MP不足");S.mp-=s[3];if(s[5]==="回復"){S.hp=Math.min(S.mhp,S.hp+50);log("💚 ヒール！");enemyTurn();return render()}if(S.last==="時間停止"&&s[0]==="メテオ"){S.last=null;log("🌌 合わせ技【時空メテオ】！");return hit(6.5,"🌌 時空メテオ","時空")}S.last=s[0];hit(s[4],"✨ "+s[0],s[5])}
+function enemyTurn(){if(E.stop){E.stop--;return log("⏱️ 敵は時間停止中")}let m=E.name==="古龍"&&E.hp<E.mhp/2?1.45:1,d=Math.max(1,Math.floor(E.a*m-D()*.55+Math.random()*5));S.hp-=d;document.body.classList.add("shake");setTimeout(()=>document.body.classList.remove("shake"),400);log(`${E.i} ${E.name}の攻撃 ${d}ダメージ`);if(E.poison){E.hp-=8;E.poison--;log("☠️ 毒ダメージ")}if(E.name==="魔王"&&Math.random()<.2){S.status="毒";log("☠️ 呪毒を受けた")}if(S.status==="毒")S.hp-=4;if(S.hp<=0){S.hp=Math.ceil(S.mhp/2);S.mp=Math.ceil(S.mmp/2);S.gold=Math.max(0,S.gold-20);S.status=null;log("💀 敗北。宿屋へ…");spawn()}}
+function win(){S.kills++;S.gold+=E.g;S.xp+=E.xp;log(`🏆 ${E.name}撃破 +${E.xp}EXP +${E.g}G`);if(E.boss){S.bk++;S.dun++;drop(true)}else if(Math.random()<.2)drop(false);if(Math.random()<(S.job==="盗賊"?.32:.18))chest();if(Math.random()<.22)event();while(S.xp>=S.next){S.xp-=S.next;S.lv++;S.next=Math.floor(S.next*1.25);S.mhp+=8;S.mmp+=4;S.a+=2;S.d++;S.hp=S.mhp;S.mp=S.mmp;log(`⬆️ Lv.${S.lv}！`)}S.floor++;quest();save();spawn(S.floor%6===0)}
+function drop(b){let pool=b?gear.slice(3):gear.slice(0,3),g=pool[Math.floor(Math.random()*pool.length)];S.inv.push(g);log(`🎁 装備ドロップ【${g[4]}】${g[0]}`)}
+function chest(){S.ch++;let g=30+Math.floor(Math.random()*91);S.gold+=g;log(`🧰 宝箱！ ${g}G`);quest()}function event(){let r=Math.random();if(r<.33){S.hp=Math.min(S.mhp,S.hp+40);log("⛲ 癒しの泉 HP回復")}else if(r<.66){S.gold+=80;log("🧚 妖精から80G")}else{S.hp=Math.max(1,S.hp-20);log("🪤 罠！ HP-20")}}
+function quest(){if(S.kills>=10)S.q.kill=true;if(S.ch>=3)S.q.chest=true;if(S.bk>=1)S.q.boss=true}
+function equip(i){let g=S.inv[i];S.eq[g[1]]=g;save();render();log(`🗡️ ${g[0]}を装備`)}function inn(){S.hp=S.mhp;S.mp=S.mmp;S.status=null;save();render();log("🏨 完全回復。0G")}
+function reinc(){if(S.lv<20)return log("🔒 Lv.20以上必要");let o=$("overlay");o.classList.remove("hide");o.innerHTML=`<div class=modal><h2>🔄 転生3択</h2><button class=choice onclick="doRe('a')">🔥 武神：攻撃を恒久強化</button><button class=choice onclick="doRe('d')">🛡️ 守護神：HP・防御を恒久強化</button><button class=choice onclick="doRe('m')">🔮 賢者：MPを恒久強化</button><button onclick="closeO()">やめる</button></div>`}
+function doRe(t){let keep={job:S.job,reb:S.reb+1,rp:S.rp+Math.floor(S.lv/5)+1,inv:S.inv,eq:S.eq,bk:S.bk,ch:S.ch,q:S.q};S=fresh();Object.assign(S,keep);let j=jobs[S.job];S.mhp=j.hp;S.hp=j.hp;S.mmp=j.mp;S.mp=j.mp;S.a=j.a;S.d=j.d;if(t==="a")S.a+=S.reb*2;if(t==="d"){S.mhp+=S.reb*10;S.hp=S.mhp;S.d+=S.reb}if(t==="m"){S.mmp+=S.reb*8;S.mp=S.mmp}closeO();save();spawn();log(`✨ 転生${S.reb}回目！`)}function closeO(){$("overlay").classList.add("hide")}function show(t){tab=t;render()}
+function render(){if(!S.job)return pickJob();$("hero").innerHTML=`<b>${jobs[S.job].i} ${S.job}</b> Lv.${S.lv}　<span style="color:#ffd166">転生${S.reb}回 / RP ${S.rp}</span>`;$("stats").innerHTML=`<div class=sg><div class=s><b>${A()}</b>攻撃</div><div class=s><b>${D()}</b>防御</div><div class=s><b>${S.gold}</b>G</div><div class=s><b>${S.kills}</b>討伐</div></div>`;$("bars").innerHTML=`HP ${Math.max(0,S.hp)}/${S.mhp}<div class=bar><i class=hp style="width:${100*S.hp/S.mhp}%"></i></div>MP ${S.mp}/${S.mmp}<div class=bar><i class=mp style="width:${100*S.mp/S.mmp}%"></i></div>EXP ${S.xp}/${S.next}<div class=bar><i class=xp style="width:${100*S.xp/S.next}%"></i></div>${S.status?`<span class=tag>状態異常:${S.status}</span>`:""}`;if(E){$("enemy").innerHTML=`<div class=ico>${E.i}</div><b>${E.boss?"👑 BOSS ":""}${E.name}</b><br><small>弱点:${E.weak} ${E.gim}</small><div class=bar><i class=hp style="width:${Math.max(0,100*E.hp/E.mhp)}%"></i></div>${Math.max(0,E.hp)}/${E.mhp}`;$("combat").innerHTML=`<button class=pri onclick="hit()">⚔️ 攻撃</button><button onclick="enemyTurn();render()">🛡️ 防御</button>`}let T="";if(tab==="adv")T=`<h3>🗺️ ダンジョン</h3><p>第${S.dun+1}迷宮・${S.floor}階。6階ごとにボス出現。</p><button onclick="spawn(true)">👑 ボスに挑戦</button>`;if(tab==="skill")T=`<h3>✨ 技・合わせ技</h3><div class=grid>${skills.map((s,i)=>`<button onclick="skill(${i})" ${s[1]!==S.job||S.lv<s[2]?"disabled":""}>${s[0]}<br><small>${s[1]} Lv.${s[2]} / ${s[3]}MP</small></button>`).join("")}</div><p>時間停止 → メテオ = <b>時空メテオ</b></p>`;if(tab==="eq")T=`<h3>🗡️ 装備</h3>${S.inv.length?S.inv.map((g,i)=>`<div class=item>【${g[4]}】${g[0]} 攻+${g[2]} 防+${g[3]} <button onclick="equip(${i})">装備</button></div>`).join(""):"未所持"}`;if(tab==="quest")T=`<h3>📜 クエスト</h3><p>${S.q.kill?"✅":"⬜"} 敵10体 ${S.kills}/10</p><p>${S.q.chest?"✅":"⬜"} 宝箱3個 ${S.ch}/3</p><p>${S.q.boss?"✅":"⬜"} ボス1体 ${S.bk}/1</p>`;if(tab==="re")T=`<h3>🔄 転生</h3><p>Lv.20で転生可能。転生時に3つの加護から1つ選択。</p><button class=pri onclick="reinc()">転生する</button>`;if(tab==="inn")T=`<h3>🏨 宿屋</h3><p>HP・MP・状態異常を無料で回復。</p><button onclick="inn()">休む（0G）</button>`;$("tab").innerHTML=T;save()}
+if("serviceWorker"in navigator)navigator.serviceWorker.register("/reward/sw.js");if(!S.job)pickJob();else spawn();log("🌟 Re:World 新章が始まった。");
 </script></body></html>
