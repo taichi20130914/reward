@@ -141,4 +141,7 @@ if(tab=="reinc")T=`<h2>🔄 転生</h2><p>Lv.30以上で転生可能。レベル
 document.getElementById("tab").innerHTML=T;
 }
 spawn();log("🌟 異世界に転生した。魔王、時空界、そして神界を目指せ。");
+if ("serviceWorker" in navigator) {
+  navigator.serviceWorker.register("/reward/sw.js");
+}
 </script></body></html>
