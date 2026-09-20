@@ -1,0 +1,24 @@
+{
+  "name": "転生∞ - Re:World",
+  "short_name": "Re:World",
+  "description": "一人で世界を超越する転生RPG",
+  "id": "/reward/",
+  "start_url": "/reward/",
+  "scope": "/reward/",
+  "display": "standalone",
+  "background_color": "#080b18",
+  "theme_color": "#080b18",
+  "orientation": "portrait",
+  "icons": [
+    {
+      "src": "/reward/icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "/reward/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ]
+}
